@@ -5,7 +5,6 @@ const { body } = require('express-validator')
 const ngoController = require('./controllers/NgoController')
 
 // setup URIs (paths)
-router.get('/ngos', ngoController.index)
 router.post('/ngo',
 	[
 		body('name')
@@ -42,6 +41,8 @@ router.post('/ngo',
 			.isLength(2)
 	], ngoController.create
 )
+router.get('/ngos', ngoController.index)
+router.get('/ngo/:id', ngoController.show)
 
 // export router with paths
 module.exports = router

@@ -4,13 +4,6 @@ const crypto = require('crypto')
 const NGO = require('../database/models/ngo')
 
 module.exports = {
-	async index(req, res) {
-		NGO.find({}, (error, ngos) => {
-			if (error) return res.json(error)
-			return res.json(ngos)
-		})
-	},
-
 	async create(req, res) {
 		const errors = validationResult(req)['errors']
 		if (errors.length) return res.status(422).json(errors)
@@ -32,6 +25,22 @@ module.exports = {
 		NGO.create(ngo, (error, ngo) => {
 			if (error) return res.json(error)
 			return res.status(201).json(ngo)
+		})
+	},
+
+	async index(req, res) {
+		NGO.find({}, (error, ngos) => {
+			if (error) return res.json(error)
+			return res.json(ngos)
+		})
+	},
+
+	async show(req, res) {
+		const id = req.params.id
+		
+		NGO.findOne({ id: id }, (error, ngo) => {
+			if (error) return res.json(error)
+			return res.json(ngo)
 		})
 	}
 }
