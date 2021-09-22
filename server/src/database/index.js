@@ -1,10 +1,8 @@
 const mongoose = require('mongoose')
-const dotenv = require('dotenv')
-
-dotenv.config()
+require('dotenv').config()
 
 const auth = {
-	username: process.env.USERNAME,
+	username: process.env.USER,
 	password: process.env.PASSWORD
 }
 
