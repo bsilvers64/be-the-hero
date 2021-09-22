@@ -1,23 +1,24 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "main": "./app.js",
-  "author": "Arthur Diniz da Luz <arthurdiluz@outlook.com>",
-  "license": "ISC",
-  "private": true,
-  "scripts": {
-    "start": "node ./src/bin/www",
-    "dev": "nodemon ./src/bin/www"
-  },
-  "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "express-validator": "^6.12.1",
-    "morgan": "~1.9.1"
-  },
-  "devDependencies": {
-    "cors": "^2.8.5",
-    "nodemon": "^2.0.12"
-  }
+	"name": "server",
+	"version": "1.0.0",
+	"main": "./app.js",
+	"author": "Arthur Diniz da Luz <arthurdiluz@outlook.com>",
+	"license": "ISC",
+	"private": true,
+	"scripts": {
+		"start": "node ./src/bin/www",
+		"dev": "nodemon ./src/bin/www"
+	},
+	"dependencies": {
+		"cookie-parser": "~1.4.4",
+		"debug": "~2.6.9",
+		"express": "~4.16.1",
+		"express-validator": "^6.12.1",
+		"morgan": "~1.9.1"
+	},
+	"devDependencies": {
+		"cors": "^2.8.5",
+		"eslint": "^7.32.0",
+		"nodemon": "^2.0.12"
+	}
 }
