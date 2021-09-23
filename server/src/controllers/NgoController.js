@@ -42,5 +42,38 @@ module.exports = {
 			if (error) return res.json(error)
 			return res.json(ngo)
 		})
+	},
+
+	async update(req, res) {
+		const errors = validationResult(req)['errors']
+		if (errors.length) return res.status(422).json(errors)
+		
+		let { password } = req.body
+		const { id, name, email, whatsapp, city, state } = req.body
+		const currentHashedPassword = (await NGO.findOne({ id: id }))['password']
+		
+		const isSamePassword = bcrypt.compareSync(password, currentHashedPassword)
+		
+		if (isSamePassword) {
+			password = currentHashedPassword
+		} else {
+			password = bcrypt.hashSync(password, 10)
+		}
+
+		NGO.findOneAndUpdate({
+			id: id
+		}, {
+			name: name,
+			email: email,
+			password: password,
+			whatsapp: whatsapp,
+			city: city,
+			state: state,
+			created_at: (await NGO.findOne({ id: id }))['created_at'],
+			updated_at: Date.now()
+		}, (error, updated) => {
+			if (error) return res.json(error)
+			return res.json(updated)
+		})
 	}
 }
