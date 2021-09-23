@@ -45,6 +45,7 @@ router.post('/ngo', bodyParams, ngoController.create)
 router.get('/ngos', ngoController.index)
 router.get('/ngo/:id', ngoController.show)
 router.patch('/ngo', bodyParams, ngoController.update)
+router.delete('/ngo/:id', ngoController.delete)
 
 // export router with paths
 module.exports = router

@@ -51,6 +51,10 @@ module.exports = {
 		let { password } = req.body
 		const { id, name, email, whatsapp, city, state } = req.body
 		const currentHashedPassword = (await NGO.findOne({ id: id }))['password']
+
+		if (!currentHashedPassword) return res.status(404).json({
+			error: `NGO '${name}' not found`
+		})
 		
 		const isSamePassword = bcrypt.compareSync(password, currentHashedPassword)
 		
@@ -75,5 +79,24 @@ module.exports = {
 			if (error) return res.json(error)
 			return res.json(updated)
 		})
+	},
+
+	async delete(req, res) {
+		const { id } = req.params
+		const authId = req.headers.authorization
+
+		const ngo = await NGO.findOne({ id: id })
+
+		if (!ngo) return res.status(404).json({ error: `NGO with id '${id}' not found` })
+
+		if ((id !== authId) || (ngo.id !== authId)) return res.status(401).json({
+			error: 'Unauthorized'
+		})
+
+		NGO.deleteOne({ id: ngo.id }, error => {
+			if (error) return res.json(error)
+		})
+    
+		return res.status(410).json({ id: id })
 	}
 }
