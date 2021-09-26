@@ -3,9 +3,10 @@ const { body } = require('express-validator')
 
 // import controllers
 const ngoController = require('./controllers/NgoController')
+const IncidentController = require('./controllers/IncidentController')
 
 // parameter requirements
-const bodyParams = [
+const NgoBodyParams = [
 	body('name')
 		.isString()
 		.isLength({
@@ -41,10 +42,10 @@ const bodyParams = [
 ]
 
 // setup URIs (paths)
-router.post('/ngo', bodyParams, ngoController.create)
+router.post('/ngo', NgoBodyParams, ngoController.create)
 router.get('/ngos', ngoController.index)
 router.get('/ngo/:id', ngoController.show)
-router.patch('/ngo', bodyParams, ngoController.update)
+router.patch('/ngo', NgoBodyParams, ngoController.update)
 router.delete('/ngo/:id', ngoController.delete)
 
 // export router with paths
