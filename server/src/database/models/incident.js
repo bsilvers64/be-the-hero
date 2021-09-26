@@ -7,7 +7,7 @@ const incidentSchema = new mongoose.Schema({
 		unique: true,
 		immutable: true
 	},
-	name: {
+	title: {
 		type: String,
 		required: true
 	},
