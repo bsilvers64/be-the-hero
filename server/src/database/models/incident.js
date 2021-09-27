@@ -26,6 +26,10 @@ const incidentSchema = new mongoose.Schema({
 	updated_at: {
 		type: Date,
 		default: Date.now
+	},
+	ngo_owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Ngo'
 	}
 })
 
