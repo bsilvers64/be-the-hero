@@ -17,29 +17,43 @@ module.exports = {
 			error: 'you are not logged in'
 		})
 		
-		if (!(await NGO.find({ id: authId })).length) {
-			return res.status(404).json({
-				error: `NGO with id ${authId} not found`
-			})
+		try {
+			if (!(await NGO.find({ id: authId })).length) {
+				return res.status(404).json({
+					error: `NGO with id ${authId} not found`
+				})
+			}
+		} catch (error) {
+			return res.json({ error: error })
 		}
 		
-		const incident = await Incident.create({
-			id: id,
-			title: title,
-			description: description,
-			value: Number(value),
-			ngo_owner: await NGO.findOne({ id: authId })
-		})
+		let incident = null
 
-		NGO.findOneAndUpdate({
-			id: authId
-		}, {
-			$push: {
-				incidents: incident
-			}
-		}, error => {
-			if (error) return res.json(error)
-		})
+		try {
+			incident = await Incident.create({
+				id: id,
+				title: title,
+				description: description,
+				value: Number(value),
+				ngo_owner: await NGO.findOne({ id: authId })
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
+
+		try {
+			NGO.findOneAndUpdate({
+				id: authId
+			}, {
+				$push: {
+					incidents: incident
+				}
+			}, error => {
+				if (error) throw error
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
 
 		return res.json({ id: incident['id']} )
 	},
@@ -48,15 +62,20 @@ module.exports = {
 		const { page = 1 } = req.query // get page param value; set 1 if any page param exist
 		const count = await incident.count() // counts the amount of incidents existent
 		const limPage = 5 // amount of registers per page
+		let incidents = null
 
-		const incidents = await Incident
-			.find() // get all incidents from database
-			.populate({ // join 'ngo' columns with 'incident' specific columns
-				path: 'ngo_owner',
-				select: ['name', 'email', 'whatsapp', 'city', 'state']
-			})
-			.limit(limPage) // limit return registers
-			.skip((page - 1) * limPage) // set registers to be presented
+		try {
+			incidents = await Incident
+				.find() // get all incidents from database
+				.populate({ // join 'ngo' columns with 'incident' specific columns
+					path: 'ngo_owner',
+					select: ['name', 'email', 'whatsapp', 'city', 'state']
+				})
+				.limit(limPage) // limit return registers
+				.skip((page - 1) * limPage) // set registers to be presented
+		} catch (error) {
+			return res.json({ error: error })
+		}
 		
 		/* when making pagination, the amount of items in database
     is sent to front-end through the response's header */
@@ -71,10 +90,14 @@ module.exports = {
 		
 		const id = req.params.id
 
-		Incident.findOne({ id: id }, (error, incident) => {
-			if (error) return res.json(error)
-			return res.json(incident)
-		})
+		try {
+			Incident.findOne({ id: id }, (error, incident) => {
+				if (error) throw error
+				return res.json(incident)
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
 	},
 
 	async update(req, res) {
@@ -83,18 +106,22 @@ module.exports = {
 
 		const { id, title, description, value } = req.body
 
-		Incident.findOneAndUpdate({
-			id: id
-		}, {
-			title: title,
-			description: description,
-			value: value,
-			created_at: (await Incident.findOne({ id: id }))['created_at'],
-			updated_at: Date.now()
-		}, error => {
-			if (error) return res.json(error)
-			return res.json({ updated: true })
-		})
+		try {
+			Incident.findOneAndUpdate({
+				id: id
+			}, {
+				title: title,
+				description: description,
+				value: value,
+				created_at: (await Incident.findOne({ id: id }))['created_at'],
+				updated_at: Date.now()
+			}, error => {
+				if (error) throw error
+				return res.json({ updated: true })
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
 	},
 
 	async delete(req, res) {
@@ -112,9 +139,13 @@ module.exports = {
 			error: 'Unauthorized'
 		})
 
-		Incident.deleteOne({ id: incident.id }, error => {
-			if (error) return res.json(error)
-		})
+		try {
+			Incident.deleteOne({ id: incident.id }, error => {
+				if (error) throw error
+			})
+		} catch (error) {
+			res.json(error)
+		}
     
 		return res.status(410).json({ id: id })
 	}
