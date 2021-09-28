@@ -43,5 +43,26 @@ module.exports = {
 		})
 
 		return res.json({ id: incident['id']} )
+	},
+	
+	async index(req, res) {
+		const { page = 1 } = req.query // get page param value; set 1 if any page param exist
+		const count = await incident.count()
+		const limPage = 5 // amount of registers per page
+
+		const incidents = await Incident
+			.find() // get all incidents from database
+			.populate({ // join 'ngo' columns with 'incident' specific columns
+				path: 'ngo_owner',
+				select: ['name', 'email', 'whatsapp', 'city', 'state']
+			})
+			.limit(limPage) // limit return registers
+			.skip((page - 1) * limPage) // set registers to be presented
+		
+		/* when making pagination, the amount of items in database
+    is sent to front-end through the response's header */
+		res.header('X-Total-Count', count['count(*)'])
+			
+		return res.json(incidents)
 	}
 }

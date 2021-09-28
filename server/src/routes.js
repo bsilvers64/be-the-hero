@@ -55,7 +55,7 @@ const incidentBodyParams = [
 	body('value')
 		.isLength({
 			min: 1,
-			max: 7
+			max: 15
 		}).withMessage('Monetary value not allowed')
 		.isNumeric()
 ]
@@ -68,6 +68,7 @@ router.patch('/ngo', ngoBodyParams, ngoController.update)
 router.delete('/ngo/:id', ngoController.delete)
 
 router.post('/incident', incidentBodyParams, IncidentController.create)
+router.get('/incidents', IncidentController.index)
 
 // export router with paths
 module.exports = router
