@@ -75,5 +75,25 @@ module.exports = {
 			if (error) return res.json(error)
 			return res.json(incident)
 		})
+	},
+
+	async update(req, res) {
+		const { errors } = validationResult(req)
+		if (errors.length) return res.status(422).json(errors)
+
+		const { id, title, description, value } = req.body
+
+		Incident.findOneAndUpdate({
+			id: id
+		}, {
+			title: title,
+			description: description,
+			value: value,
+			created_at: (await Incident.findOne({ id: id }))['created_at'],
+			updated_at: Date.now()
+		}, error => {
+			if (error) return res.json(error)
+			return res.json({ updated: true })
+		})
 	}
 }

@@ -12,12 +12,13 @@ const IncidentController = require('./controllers/IncidentController')
 router.post('/ngo', ngoValidator.bodyCheck, ngoController.create)
 router.get('/ngos', ngoController.index)
 router.get('/ngo/:id', ngoValidator.paramCheck, ngoController.show)
-router.patch('/ngo', ngoValidator.bodyCheck, ngoController.update)
+router.put('/ngo', ngoValidator.bodyCheck, ngoController.update)
 router.delete('/ngo/:id', ngoValidator.paramCheck, ngoController.delete)
 
 router.post('/incident', incidentValidator.bodyCheck, IncidentController.create)
 router.get('/incidents', IncidentController.index)
 router.get('/incident/:id', incidentValidator.paramCheck, IncidentController.show)
+router.put('/incident', incidentValidator.bodyCheck, IncidentController.update)
 
 // export router with paths
 module.exports = router

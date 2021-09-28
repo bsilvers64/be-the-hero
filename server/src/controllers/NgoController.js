@@ -85,9 +85,9 @@ module.exports = {
 			state: state,
 			created_at: (await NGO.findOne({ id: id }))['created_at'],
 			updated_at: Date.now()
-		}, (error, updated) => {
+		}, error => {
 			if (error) return res.json(error)
-			return res.json(updated)
+			return res.json({ updated: true })
 		})
 	},
 
