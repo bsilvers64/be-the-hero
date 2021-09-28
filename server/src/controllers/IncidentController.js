@@ -47,7 +47,7 @@ module.exports = {
 	
 	async index(req, res) {
 		const { page = 1 } = req.query // get page param value; set 1 if any page param exist
-		const count = await incident.count()
+		const count = await incident.count() // counts the amount of incidents existent
 		const limPage = 5 // amount of registers per page
 
 		const incidents = await Incident
@@ -64,5 +64,14 @@ module.exports = {
 		res.header('X-Total-Count', count['count(*)'])
 			
 		return res.json(incidents)
+	},
+
+	async show(req, res) {
+		const id = req.params.id
+
+		Incident.findOne({ id: id }, (error, incident) => {
+			if (error) return res.json(error)
+			return res.json(incident)
+		})
 	}
 }

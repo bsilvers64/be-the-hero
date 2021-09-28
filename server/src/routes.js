@@ -69,6 +69,7 @@ router.delete('/ngo/:id', ngoController.delete)
 
 router.post('/incident', incidentBodyParams, IncidentController.create)
 router.get('/incidents', IncidentController.index)
+router.get('/incident/:id', IncidentController.show)
 
 // export router with paths
 module.exports = router
