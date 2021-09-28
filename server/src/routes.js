@@ -19,6 +19,7 @@ router.post('/incident', incidentValidator.bodyCheck, IncidentController.create)
 router.get('/incidents', IncidentController.index)
 router.get('/incident/:id', incidentValidator.paramCheck, IncidentController.show)
 router.put('/incident', incidentValidator.bodyCheck, IncidentController.update)
+router.delete('/incident/:id', incidentValidator.paramCheck, IncidentController.delete)
 
 // export router with paths
 module.exports = router

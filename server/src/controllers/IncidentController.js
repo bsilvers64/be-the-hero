@@ -95,5 +95,27 @@ module.exports = {
 			if (error) return res.json(error)
 			return res.json({ updated: true })
 		})
+	},
+
+	async delete(req, res) {
+		const errors = validationResult(req)['errors']
+		if (errors.length) return res.status(422).json(errors)
+
+		const { id } = req.params
+		const authId = req.headers.authorization
+
+		const incident = await Incident.findOne({ id: id })
+
+		if (!incident) return res.status(404).json({ error: `NGO with id '${id}' not found` })
+
+		if ((id !== authId) || (incident.id !== authId)) return res.status(401).json({
+			error: 'Unauthorized'
+		})
+
+		Incident.deleteOne({ id: incident.id }, error => {
+			if (error) return res.json(error)
+		})
+    
+		return res.status(410).json({ id: id })
 	}
 }
