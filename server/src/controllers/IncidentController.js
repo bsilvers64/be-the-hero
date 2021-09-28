@@ -6,7 +6,11 @@ const incident = require('../database/models/incident')
 
 module.exports = {
 	async create(req, res) {
+		const { errors } = validationResult(req)
+		if (errors.length) return res.status(422).json(errors)
+
 		const { title, description, value } = req.body
+		const id = crypto.randomBytes(4).toString('hex')
 		const authId = req.headers.authorization
 
 		if (!authId) return res.status(403).json({
@@ -18,11 +22,6 @@ module.exports = {
 				error: `NGO with id ${authId} not found`
 			})
 		}
-		
-		const id = crypto.randomBytes(4).toString('hex')
-		const { errors } = validationResult(req)
-		
-		if (errors.length) return res.status(422).json(errors)
 		
 		const incident = await Incident.create({
 			id: id,
@@ -67,6 +66,9 @@ module.exports = {
 	},
 
 	async show(req, res) {
+		const { errors } = validationResult(req)
+		if (errors.length) return res.status(422).json(errors)
+		
 		const id = req.params.id
 
 		Incident.findOne({ id: id }, (error, incident) => {

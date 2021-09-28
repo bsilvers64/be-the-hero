@@ -5,7 +5,7 @@ const NGO = require('../database/models/ngo')
 
 module.exports = {
 	async create(req, res) {
-		const errors = validationResult(req)['errors']
+		const errors = validationResult(req)['errors']		
 		if (errors.length) return res.status(422).json(errors)
 		
 		const { name, email, password, whatsapp, city, state } = req.body
@@ -29,6 +29,9 @@ module.exports = {
 	},
 
 	async index(req, res) {
+		const errors = validationResult(req)['errors']
+		if (errors.length) return res.status(422).json(errors)
+
 		NGO.find({}, (error, ngos) => {
 			if (error) return res.json(error)
 			return res.json(ngos)
@@ -36,6 +39,13 @@ module.exports = {
 	},
 
 	async show(req, res) {
+		const errors = validationResult(req)['errors']
+
+		console.log(validationResult(req))
+		console.log(errors)
+		
+		if (errors.length) return res.status(422).json(errors)
+
 		const id = req.params.id
 		
 		NGO.findOne({ id: id }, (error, ngo) => {
@@ -82,6 +92,9 @@ module.exports = {
 	},
 
 	async delete(req, res) {
+		const errors = validationResult(req)['errors']
+		if (errors.length) return res.status(422).json(errors)
+
 		const { id } = req.params
 		const authId = req.headers.authorization
 
