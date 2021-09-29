@@ -7,6 +7,7 @@ const incidentValidator = require('./validators/IncidentValidator')
 // import controllers
 const ngoController = require('./controllers/NgoController')
 const IncidentController = require('./controllers/IncidentController')
+const ProfileController = require('./controllers/ProfileController')
 
 // setup URIs (paths)
 router.post('/ngo', ngoValidator.bodyCheck, ngoController.create)
@@ -20,6 +21,8 @@ router.get('/incidents', IncidentController.index)
 router.get('/incident/:id', incidentValidator.paramCheck, IncidentController.show)
 router.put('/incident', incidentValidator.bodyCheck, IncidentController.update)
 router.delete('/incident/:id', incidentValidator.paramCheck, IncidentController.delete)
+
+router.get('/profile', ProfileController.index)
 
 // export router with paths
 module.exports = router
