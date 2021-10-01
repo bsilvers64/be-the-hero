@@ -128,25 +128,52 @@ module.exports = {
 		const errors = validationResult(req)['errors']
 		if (errors.length) return res.status(422).json(errors)
 
-		const { id } = req.params
-		const authId = req.headers.authorization
+		const { id: incidentId } = req.params
+		const { authorization: ngoAuthId } = req.headers
 
-		const incident = await Incident.findOne({ id: id })
-
-		if (!incident) return res.status(404).json({ error: `NGO with id '${id}' not found` })
-
-		if ((id !== authId) || (incident.id !== authId)) return res.status(401).json({
-			error: 'Unauthorized'
-		})
-
+		// check whether given incident exists and its NGO
 		try {
-			Incident.deleteOne({ id: incident.id }, error => {
+			Incident.findOne({ id: incidentId }, (error, incident) => {
+				if (error) throw error
+				if (!incident) throw Error(`Incident with id '${incidentId}' not found`)
+				NGO.findOne({ id: ngoAuthId }, error => {
+					if (error) throw error
+				})
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
+
+		// remove incident from NGO list of incidents
+		try {
+			const { '_id': objId } = (await Incident.findOne({ id: incidentId }, '_id')) || null
+			if (objId === null) throw Error(`Incident with ID ${incidentId} not found`)
+			
+			NGO.findOne({ id: ngoAuthId }, (error, ngo) => {
+				if (error) throw error
+				
+				const incidentIndex = ngo.incidents.indexOf(objId)
+
+				if (incidentIndex === -1) throw Error('Incident not registered in this NGO')
+				
+				ngo.incidents.splice(incidentIndex, 1) // remove incident from NGO incidents list
+				ngo.save(error => {
+					if (error) throw Error('Could not save changes')
+				})
+			})
+		} catch (error) {
+			return res.json({ error: error })
+		}
+
+		// remove incident from database
+		try {
+			Incident.deleteOne({ id: incidentId }, error => {
 				if (error) throw error
 			})
 		} catch (error) {
 			res.json(error)
 		}
     
-		return res.status(410).json({ id: id })
+		return res.status(410).json({ deleted: true })
 	}
 }

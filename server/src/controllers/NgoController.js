@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const NGO = require('../database/models/ngo')
+const Incident = require('../database/models/incident')
 
 module.exports = {
 	async create(req, res) {
@@ -125,22 +126,38 @@ module.exports = {
 		const { id } = req.params
 		const authId = req.headers.authorization
 
-		const ngo = await NGO.findOne({ id: id })
-
-		if (!ngo) return res.status(404).json({ error: `NGO with id '${id}' not found` })
-
-		if ((id !== authId) || (ngo.id !== authId)) return res.status(401).json({
-			error: 'Unauthorized'
-		})
-
+		// check whether if the given NGO exists
 		try {
-			NGO.deleteOne({ id: ngo.id }, error => {
+			const ngo = await NGO.findOne({ id: id }) || null
+			if (!ngo) throw Error(`NGO with ID '${id}' not found`)
+			if ((id !== authId) || (ngo.id !== authId)) throw Error('Unauthorized')
+		} catch (error) {
+			return res.json({
+				error: error
+			})
+		}
+		
+		// delete NGO incidents
+		try {
+			Incident.deleteMany({
+				ngo_owner: (await NGO.findOne({ id: id }))
+			}, error => {
 				if (error) throw error
+			})
+		} catch (error) {
+			return res.json({
+				error: error
+			})
+		}
+
+		// delete NGO
+		try {
+			NGO.deleteOne({ id: id }, error => {
+				if (error) throw error
+				return res.json({ deleted: true })
 			})
 		} catch (error) {
 			return res.json({ error: error })
 		}
-    
-		return res.status(410).json({ id: id })
 	}
 }
