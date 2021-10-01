@@ -5,13 +5,12 @@ module.exports = {
 	async index(req, res) {
 		const { page = 1 } = req.query
 		const limPage = 5
-		const ngoId = req.headers['authorization'] || null
+		const { authorization: ngoId } = req.headers
 		
 		try {
-			if (!ngoId) return res.json({ error: 'NGO ID was not defined' })
+			if (!ngoId) throw Error('NGO ID was not defined')
 
-			const count = ((await NGO.findOne({ id: ngoId })).incidents.length) || null
-
+			const count = ((await NGO.findOne({ id: ngoId }))['incidents']).length
 			const incidents = await Incident
 				.find({'ngo_owner': (await NGO.find({ id: ngoId}))})
 				.populate({
