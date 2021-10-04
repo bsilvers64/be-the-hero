@@ -1,5 +1,12 @@
+import React from 'react'
+
+// Import routes
+import Routes from './Routes'
+
+// App component
 function App() {
-  return ( <h1>BeTheHero!</h1> )
+	return ( <Routes /> )
 }
 
+// Exports app
 export default App
