@@ -1,5 +1,8 @@
 import React from 'react'
 
+// Imports global css
+import './global.css'
+
 // Import routes
 import Routes from './Routes'
 
