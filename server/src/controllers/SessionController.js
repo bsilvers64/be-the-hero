@@ -11,7 +11,7 @@ module.exports = {
     
 		try {
 			NGO.findOne({ email: email}, async (error, ngo) => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 				const isSamePwd = await bcrypt.compare(password, ngo.password)
 				if (isSamePwd) {
 					return res.json ({

@@ -8,7 +8,7 @@ module.exports = {
 		const { authorization: ngoId } = req.headers
 		
 		try {
-			if (!ngoId) throw Error('NGO ID was not defined')
+			if (!ngoId) return res.status(404).json(`NGO ID ${ngoId} not found`)
 
 			const count = ((await NGO.findOne({ id: ngoId }))['incidents']).length
 			const incidents = await Incident

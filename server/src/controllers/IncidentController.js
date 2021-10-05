@@ -49,7 +49,7 @@ module.exports = {
 					incidents: incident
 				}
 			}, error => {
-				if (error) throw error
+				if (error) return res.status(204).json(error)
 			})
 		} catch (error) {
 			return res.json({ error: error })
@@ -92,7 +92,7 @@ module.exports = {
 
 		try {
 			Incident.findOne({ id: id }, (error, incident) => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 				return res.json(incident)
 			})
 		} catch (error) {
@@ -116,7 +116,7 @@ module.exports = {
 				created_at: (await Incident.findOne({ id: id }))['created_at'],
 				updated_at: Date.now()
 			}, error => {
-				if (error) throw error
+				if (error) return res.status(400).json(error)
 				return res.json({ updated: true })
 			})
 		} catch (error) {
@@ -134,10 +134,10 @@ module.exports = {
 		// check whether given incident exists and its NGO
 		try {
 			Incident.findOne({ id: incidentId }, (error, incident) => {
-				if (error) throw error
-				if (!incident) throw Error(`Incident with id '${incidentId}' not found`)
+				if (error) return res.status(400).json(error)
+				if (!incident) return res.status(404).json(`Incident with id '${incidentId}' not found`)
 				NGO.findOne({ id: ngoAuthId }, error => {
-					if (error) throw error
+					if (error) return res.status(404).json(error)
 				})
 			})
 		} catch (error) {
@@ -147,18 +147,18 @@ module.exports = {
 		// remove incident from NGO list of incidents
 		try {
 			const { '_id': objId } = (await Incident.findOne({ id: incidentId }, '_id')) || null
-			if (objId === null) throw Error(`Incident with ID ${incidentId} not found`)
+			if (objId === null) return res.status(404).json(`Incident with ID ${incidentId} not found`)
 			
 			NGO.findOne({ id: ngoAuthId }, (error, ngo) => {
-				if (error) throw error
+				if (error) return res.json(400).json(error)
 				
 				const incidentIndex = ngo.incidents.indexOf(objId)
 
-				if (incidentIndex === -1) throw Error('Incident not registered in this NGO')
+				if (incidentIndex === -1) return res.status(404).json('Incident not registered in this NGO')
 				
 				ngo.incidents.splice(incidentIndex, 1) // remove incident from NGO incidents list
 				ngo.save(error => {
-					if (error) throw Error('Could not save changes')
+					if (error) return res.status(400).json('Could not save changes')
 				})
 			})
 		} catch (error) {
@@ -168,7 +168,7 @@ module.exports = {
 		// remove incident from database
 		try {
 			Incident.deleteOne({ id: incidentId }, error => {
-				if (error) throw error
+				if (error) return res.status(400).json(error)
 			})
 		} catch (error) {
 			res.json(error)

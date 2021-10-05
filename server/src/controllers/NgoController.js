@@ -25,7 +25,7 @@ module.exports = {
 
 		try {
 			NGO.create(ngo, (error, ngo) => {
-				if (error) throw error
+				if (error) return res.status(400).json(error)
 				return res.status(201).json(ngo)
 			})
 		} catch (error) {
@@ -39,7 +39,7 @@ module.exports = {
 
 		try {
 			NGO.find({}, (error, ngos) => {
-				if (error) throw error
+				if (error) return res.status(406).json(error)
 				return res.json(ngos)
 			})
 		} catch (error) {
@@ -56,7 +56,7 @@ module.exports = {
 		
 		try {
 			NGO.findOne({ id: id }, (error, ngo) => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 				return res.json(ngo)
 			})
 		} catch (error) {
@@ -74,7 +74,7 @@ module.exports = {
 
 		try {
 			NGO.findOne({ id: id }, error => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 			})
 		} catch (error) {
 			return res.json(error)
@@ -111,7 +111,7 @@ module.exports = {
 				created_at: (await NGO.findOne({ id: id }))['created_at'],
 				updated_at: Date.now()
 			}, error => {
-				if (error) throw error
+				if (error) return res.status(406).json(error)
 				return res.json({ updated: true })
 			})
 		} catch (error) {
@@ -129,8 +129,8 @@ module.exports = {
 		// check whether if the given NGO exists
 		try {
 			const ngo = await NGO.findOne({ id: id }) || null
-			if (!ngo) throw Error(`NGO with ID '${id}' not found`)
-			if ((id !== authId) || (ngo.id !== authId)) throw Error('Unauthorized')
+			if (!ngo) return res.status(404).json(`NGO with ID '${id}' not found`)
+			if ((id !== authId) || (ngo.id !== authId)) return res.status(401).json('Unauthorized')
 		} catch (error) {
 			return res.json({
 				error: error
@@ -142,7 +142,7 @@ module.exports = {
 			Incident.deleteMany({
 				ngo_owner: (await NGO.findOne({ id: id }))
 			}, error => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 			})
 		} catch (error) {
 			return res.json({
@@ -153,7 +153,7 @@ module.exports = {
 		// delete NGO
 		try {
 			NGO.deleteOne({ id: id }, error => {
-				if (error) throw error
+				if (error) return res.status(404).json(error)
 				return res.json({ deleted: true })
 			})
 		} catch (error) {
