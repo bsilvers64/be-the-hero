@@ -2,11 +2,11 @@ const { body } = require('express-validator')
 
 module.exports = {
 	bodyCheck: [
-		body('id')
+		body('email')
+			.isEmail()
 			.isLength({
-				min: 8,
-				max: 8
+				min: 7,
+				max: 63
 			})
-			.withMessage('NGO ID invalid')
 	]
 }

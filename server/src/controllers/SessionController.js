@@ -1,17 +1,33 @@
 const { validationResult } = require('express-validator')
+const bcrypt = require('bcrypt')
 const NGO = require('../database/models/ngo')
 
 module.exports = {
 	async create(req, res) {
-		const { id } = req.body
+		const { email, password } = req.body
 		const { errors } = validationResult(req)
 		
 		if (errors.length) return res.status(422).json(errors)
     
 		try {
-			NGO.findOne({ id: id }, (error, ngo) => {
+			NGO.findOne({ email: email}, async (error, ngo) => {
 				if (error) throw error
-				return res.json(ngo['name'])
+				const isSamePwd = await bcrypt.compare(password, ngo.password)
+				if (isSamePwd) {
+					return res.json ({
+						id: ngo.id,
+						name: ngo.name,
+						email: ngo.email,
+						whatsapp: ngo.whatsapp,
+						city: ngo.city,
+						state: ngo.state,
+						incidents: ngo.incidents,
+						created_at: ngo.created_at,
+						updated_at: ngo.updated_at
+					})
+				} else {
+					return res.status(401).json({ error: 'Invalid password' })
+				}
 			})
 		} catch (error) {
 			return res.json({ error: error })
