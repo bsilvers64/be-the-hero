@@ -39,11 +39,13 @@ function Logon() {
 				<form onSubmit={handleLogon}>
 					<h1>Login</h1>
 					<input
+						type='email'
 						placeholder='Your email'
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 					/>
 					<input
+						type='password'
 						placeholder='Your password'
 						value={password}
 						onChange={e => setPassword(e.target.value)}

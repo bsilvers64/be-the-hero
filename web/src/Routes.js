@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 	
 // importing all components
 import Logon from './pages/Logon'
+import Register from './pages/Register'
 
 function Routes() {
 	return (
@@ -10,6 +11,7 @@ function Routes() {
 		<BrowserRouter>
 			<Switch>
 				<Route path='/' exact component={ Logon } />
+				<Route path='/register' component={ Register } />
 			</Switch>
 		</BrowserRouter>
 	)
