@@ -14,7 +14,7 @@ module.exports = {
 				if (error) return res.status(404).json(error)
 				const isSamePwd = await bcrypt.compare(password, ngo.password)
 				if (isSamePwd) {
-					return res.json ({
+					return res.status(202).json ({
 						id: ngo.id,
 						name: ngo.name,
 						email: ngo.email,

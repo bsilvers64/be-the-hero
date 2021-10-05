@@ -55,7 +55,7 @@ module.exports = {
 			return res.status(500).json(error)
 		}
 
-		return res.json({ id: incident['id']} )
+		return res.status(201).json({ id: incident['id']} )
 	},
 	
 	async index(req, res) {
@@ -81,7 +81,7 @@ module.exports = {
     is sent to front-end through the response's header */
 		res.header('X-Total-Count', count['count(*)'])
 			
-		return res.json(incidents)
+		return res.status(206).json(incidents)
 	},
 
 	async show(req, res) {
@@ -93,7 +93,7 @@ module.exports = {
 		try {
 			Incident.findOne({ id: id }, (error, incident) => {
 				if (error) return res.status(404).json(error)
-				return res.json(incident)
+				return res.status(200).json(incident)
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -117,7 +117,7 @@ module.exports = {
 				updated_at: Date.now()
 			}, error => {
 				if (error) return res.status(400).json(error)
-				return res.json({ updated: true })
+				return res.status(201).send()
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -150,7 +150,7 @@ module.exports = {
 			if (objId === null) return res.status(404).json(`Incident with ID ${incidentId} not found`)
 			
 			NGO.findOne({ id: ngoAuthId }, (error, ngo) => {
-				if (error) return res.json(400).json(error)
+				if (error) return res.status(400).json(error)
 				
 				const incidentIndex = ngo.incidents.indexOf(objId)
 

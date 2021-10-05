@@ -40,7 +40,7 @@ module.exports = {
 		try {
 			NGO.find({}, (error, ngos) => {
 				if (error) return res.status(406).json(error)
-				return res.json(ngos)
+				return res.status(200).json(ngos)
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -57,7 +57,7 @@ module.exports = {
 		try {
 			NGO.findOne({ id: id }, (error, ngo) => {
 				if (error) return res.status(404).json(error)
-				return res.json(ngo)
+				return res.status(200).json(ngo)
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -112,7 +112,7 @@ module.exports = {
 				updated_at: Date.now()
 			}, error => {
 				if (error) return res.status(406).json(error)
-				return res.json({ updated: true })
+				return res.status(201).json({ updated: true })
 			})
 		} catch (error) {
 			return res.status(500).json(error)
