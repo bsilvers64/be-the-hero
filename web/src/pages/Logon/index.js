@@ -17,12 +17,10 @@ function Logon() {
 
 		try {
 			const response = await api.post('/session', { email, password })
-			console.log(response)
 
 			// Stores id and name from ngo into the browser's local storage
-			localStorage.setItem('ngoEmail', email)
-			localStorage.setItem('ngoPassword', password)
-			localStorage.setItem('ngoName', response.data.name)
+			localStorage.setItem('ngoId', response.data['id'])
+			localStorage.setItem('ngoName', response.data['name'])
 
 			// redirect user to profile page
 			history.push('/profile')
@@ -51,11 +49,6 @@ function Logon() {
 						onChange={e => setPassword(e.target.value)}
 					/>
 					<button className='button' type='submit'>Get in</button>
-					{/**
-					 * Link: redirects user to a link without page's reload.
-					 * FiLogIn: it's an icon in a component format,
-					 * this icon was imported from feather icons pack.
-					*/}
 					<Link className='back-link' to='/register'>
 						<FiLogIn size={16} color='#e02041' />
 						I am not enrolled
