@@ -30,7 +30,7 @@ module.exports = {
 				}
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	}
 }

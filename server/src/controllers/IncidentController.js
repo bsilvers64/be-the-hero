@@ -24,7 +24,7 @@ module.exports = {
 				})
 			}
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 		
 		let incident = null
@@ -38,7 +38,7 @@ module.exports = {
 				ngo_owner: await NGO.findOne({ id: authId })
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 
 		try {
@@ -52,7 +52,7 @@ module.exports = {
 				if (error) return res.status(204).json(error)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 
 		return res.json({ id: incident['id']} )
@@ -74,7 +74,7 @@ module.exports = {
 				.limit(limPage) // limit return registers
 				.skip((page - 1) * limPage) // set registers to be presented
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 		
 		/* when making pagination, the amount of items in database
@@ -96,7 +96,7 @@ module.exports = {
 				return res.json(incident)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -120,7 +120,7 @@ module.exports = {
 				return res.json({ updated: true })
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -141,7 +141,7 @@ module.exports = {
 				})
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 
 		// remove incident from NGO list of incidents
@@ -162,7 +162,7 @@ module.exports = {
 				})
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 
 		// remove incident from database
@@ -171,9 +171,8 @@ module.exports = {
 				if (error) return res.status(400).json(error)
 			})
 		} catch (error) {
-			res.json(error)
+			return res.status(500).json(error)
 		}
-    
-		return res.status(410).json({ deleted: true })
+		return res.status(204)
 	}
 }

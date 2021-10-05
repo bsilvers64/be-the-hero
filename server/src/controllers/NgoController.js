@@ -29,7 +29,7 @@ module.exports = {
 				return res.status(201).json(ngo)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -43,7 +43,7 @@ module.exports = {
 				return res.json(ngos)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -60,7 +60,7 @@ module.exports = {
 				return res.json(ngo)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -77,13 +77,13 @@ module.exports = {
 				if (error) return res.status(404).json(error)
 			})
 		} catch (error) {
-			return res.json(error)
+			return res.status(500).json(error)
 		}
 
 		try {
 			currentHashedPassword = (await NGO.findOne({ id: id }))['password']
 		} catch (error) {
-			return res.json({ error: error})
+			return res.status(500).json(error)
 		}
 		
 		if (!currentHashedPassword) return res.status(404).json({
@@ -115,7 +115,7 @@ module.exports = {
 				return res.json({ updated: true })
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	},
 
@@ -132,9 +132,7 @@ module.exports = {
 			if (!ngo) return res.status(404).json(`NGO with ID '${id}' not found`)
 			if ((id !== authId) || (ngo.id !== authId)) return res.status(401).json('Unauthorized')
 		} catch (error) {
-			return res.json({
-				error: error
-			})
+			return res.status(500).json(error)
 		}
 		
 		// delete NGO incidents
@@ -145,19 +143,17 @@ module.exports = {
 				if (error) return res.status(404).json(error)
 			})
 		} catch (error) {
-			return res.json({
-				error: error
-			})
+			return res.status(500).json(error)
 		}
 
 		// delete NGO
 		try {
 			NGO.deleteOne({ id: id }, error => {
 				if (error) return res.status(404).json(error)
-				return res.json({ deleted: true })
+				return res.status(204)
 			})
 		} catch (error) {
-			return res.json({ error: error })
+			return res.status(500).json(error)
 		}
 	}
 }

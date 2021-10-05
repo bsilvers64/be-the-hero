@@ -32,9 +32,7 @@ module.exports = {
 			
 			return res.status(200).json(incidents)
 		} catch (error) {
-			return res.json({
-				error: error
-			})
+			return res.status(500).json(error)
 		}
 	}
 }
