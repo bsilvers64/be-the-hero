@@ -150,7 +150,7 @@ module.exports = {
 		try {
 			NGO.deleteOne({ id: id }, error => {
 				if (error) return res.status(404).json(error)
-				return res.status(204)
+				return res.status(204).send()
 			})
 		} catch (error) {
 			return res.status(500).json(error)

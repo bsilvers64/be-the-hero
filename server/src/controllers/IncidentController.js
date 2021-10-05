@@ -173,6 +173,6 @@ module.exports = {
 		} catch (error) {
 			return res.status(500).json(error)
 		}
-		return res.status(204)
+		return res.status(204).send()
 	}
 }
