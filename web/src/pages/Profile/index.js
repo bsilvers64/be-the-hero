@@ -53,7 +53,7 @@ function Profile() {
 			<header>
 				<img src={logoImg} alt='Be The Hero' />
 				<span>Welcome, {ngoName}!</span>
-				<Link className='button' to='/incidents/new'>Register a new case</Link>
+				<Link className='button' to='/incident/new'>Register a new case</Link>
 				<button onClick={handleLogout} type='button'>
 					<FiPower size={18} color='#e02041' />
 				</button>
