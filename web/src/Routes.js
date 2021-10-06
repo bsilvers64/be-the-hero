@@ -6,6 +6,7 @@ import Logon from './pages/Logon'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 import NewIncident from './pages/Incident/New'
+import EditIncident from './pages/Incident/Edit'
 
 function Routes() {
 	return (
@@ -16,6 +17,7 @@ function Routes() {
 				<Route path='/register' component={ Register } />
 				<Route path='/profile' component={ Profile } />
 				<Route path='/incident/new' component={ NewIncident } />
+				<Route path='/incident/edit/:id' component={ EditIncident } />
 			</Switch>
 		</BrowserRouter>
 	)

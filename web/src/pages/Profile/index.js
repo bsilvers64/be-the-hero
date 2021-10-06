@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { FiPower, FiTrash2 } from 'react-icons/fi'
+import { FiPower, FiTrash2, FiEdit } from 'react-icons/fi'
 import api from '../../services/api'
 import './styles.css'
 import logoImg from '../../assets/logo.svg'
@@ -8,7 +8,6 @@ import logoImg from '../../assets/logo.svg'
 function Profile() {
 	const ngoId = localStorage.getItem('ngoId')
 	const ngoName = localStorage.getItem('ngoName')
-
 	const [incidents, setIncidents] = useState([])
 
 	const history = useHistory()
@@ -77,9 +76,12 @@ function Profile() {
 									}).format(incident.value)
 								}
 							</p>
-							<button onClick={() => handleDeleteIncident(incident.id)} type='button'>
+							<button onClick={() => handleDeleteIncident(incident.id)} type='button' className='delete'>
 								<FiTrash2 size={20} color='#a8a8b3' />
 							</button>
+							<Link type='button' to={`/incident/edit/${incident.id}`} className='edit'>
+								<FiEdit size={20} color='#a8a8b3' />
+							</Link>
 						</li>
 					)
 				})}
