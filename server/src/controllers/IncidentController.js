@@ -79,8 +79,8 @@ module.exports = {
 		
 		/* when making pagination, the amount of items in database
     is sent to front-end through the response's header */
-		res.header('X-Total-Count', count['count(*)'])
-			
+		res.header('x-total-count', count)
+		
 		return res.status(206).json(incidents)
 	},
 
