@@ -9,7 +9,7 @@ const routes = require('./routes')
 
 // setting up routes
 const app = express() // create app with routes' structures
-app.use(cors())  // control access permissions in URLs
+app.use(cors({ origin: '*' }))  // control access permissions in URLs
 app.use(logger('dev')) // create middleware log
 app.use(express.json()) // add JSON conversor
 app.use(express.urlencoded({ extended: false })) // use query string
