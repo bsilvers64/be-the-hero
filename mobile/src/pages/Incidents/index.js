@@ -24,13 +24,14 @@ function Incidents() {
 		setIsLoading(true)
     
 		try {
-			const response = await api.get('/incidents', {
-				params: { page }
+			api.get('/incidents', { params: { page } }).then(response => {
+				setIncidents([...incidents, ...response.data])
+				setTotal(response.headers['x-total-count'])
+				setPage(page + 1)
+				setIsLoading(false)
+			}).catch(error => {
+				throw Error(error)
 			})
-			setIncidents([...incidents, ...response.data])
-			setTotal(response.headers['x-total-count'])
-			setPage(page + 1)
-			setIsLoading(false)
 		} catch(error) {
 			throw Error(error)
 		}
