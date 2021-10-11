@@ -48,6 +48,8 @@ First, install the dependencies in _package.json_.
 
 Now you need to create an acount in [MongoDB Atlas](https://cloud.mongodb.com/), create a project named 'BeTheHero', a database named 'bethehero', and then connect to MongoDB through the URI in *./server/src/database/index.js*.
 
+Change create a file named *.env* based on *.env.example* and insert your values.
+
 Now you're able to run the server.
 
 **PRODUCTION:** *`> npm start`*
@@ -78,9 +80,9 @@ First, install the dependencies in _package.json_.
 
 `> npm install`
 
-⚠️ **IMPORTANT:** you'll have to edit **api.js** file and insert your computer's ID in the **baseURL** attribute _(line 8)_.
+- ⚠️ **IMPORTANT:** you'll have to edit **api.js** file and insert your computer's ID in the **baseURL** attribute _(line 8)_.
 
-Now you're you can run the app.
+Now you can run the app.
 
 `> npm start`
 
@@ -123,19 +125,19 @@ and the packages will be fixed.
 
 ### **Home screen**
 
-![home](./images/mobile/homepage.png)
+![home](./images/mobile/homepage.PNG)
 
 ### **Case screen**
 
-![case](./images/mobile/case.png)
+![case](./images/mobile/case.PNG)
 
 ### **Texting through WhatsApp**
 
-![whatsapp-message](./images/mobile/case-whatsapp-message.png)
+![whatsapp-message](./images/mobile/case-whatsapp-message.PNG)
 
 ### **Texting through E-mail**
 
-![email-message](./images/mobile/case-email-message.png)
+![email-message](./images/mobile/case-email-message.PNG)
 
 ---
 
