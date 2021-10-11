@@ -95,7 +95,11 @@ module.exports = {
 		if (isSamePassword) {
 			password = currentHashedPassword
 		} else {
-			password = bcrypt.hashSync(password, 10)
+			bcrypt.hash(password, 10).then(pwd => {
+				password = pwd
+			}).catch (error => {
+				return res.status(500).json(error)
+			})
 		}
 
 		try {
