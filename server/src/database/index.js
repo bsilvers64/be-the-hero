@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 
-const auth = {
+const env = {
 	username: process.env.USER,
-	password: process.env.PASSWORD
+	password: process.env.PASSWORD,
+	db_table: process.env.DB_TABLE
 }
 
 // eslint-disable-next-line quotes
-const uri = `mongodb+srv://${auth.username}:${auth.password}@bethehero.9qryn.mongodb.net/BeTheHero`
+const uri = `mongodb+srv://${env.username}:${env.password}@bethehero.9qryn.mongodb.net/${env.db_table}`
+console.log(uri)
 
 mongoose.connect(uri, {
 	useNewUrlParser: true,
