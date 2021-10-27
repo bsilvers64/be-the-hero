@@ -1,5 +1,10 @@
 {
   "main": "index.js",
+  "author": {
+    "name": "Arthur Diniz da Luz",
+    "email": "arthurdiluz@outlook.com",
+    "url": "http://arthurdiluz.github.io/"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",

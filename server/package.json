@@ -2,7 +2,11 @@
 	"name": "server",
 	"version": "1.0.0",
 	"main": "./app.js",
-	"author": "Arthur Diniz da Luz <arthurdiluz@outlook.com>",
+	"author": {
+		"name": "Arthur Diniz da Luz",
+		"email": "arthurdiluz@outlook.com",
+		"url": "http://arthurdiluz.github.io/"
+	},
 	"license": "ISC",
 	"private": true,
 	"scripts": {
