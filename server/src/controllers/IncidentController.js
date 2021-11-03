@@ -10,32 +10,27 @@ module.exports = {
 		if (errors.length) return res.status(422).json(errors)
 
 		const { title, description, value } = req.body
+		const { ngo_id } = req.headers
 		const id = crypto.randomBytes(4).toString('hex')
-		const authId = req.headers.authorization
-
-		if (!authId) return res.status(403).json({
-			error: 'you are not logged in'
-		})
+		let incident = null
 		
 		try {
-			if (!(await NGO.find({ id: authId })).length) {
+			if (!(await NGO.find({ id: ngo_id })).length) {
 				return res.status(404).json({
-					error: `NGO with id ${authId} not found`
+					error: `NGO with id ${ngo_id} not found`
 				})
 			}
 		} catch (error) {
 			return res.status(500).json(error)
 		}
 		
-		let incident = null
-
 		try {
 			incident = await Incident.create({
 				id: id,
 				title: title,
 				description: description,
 				value: Number(value),
-				ngo_owner: await NGO.findOne({ id: authId })
+				ngo_owner: await NGO.findOne({ id: ngo_id })
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -43,7 +38,7 @@ module.exports = {
 
 		try {
 			NGO.findOneAndUpdate({
-				id: authId
+				id: ngo_id
 			}, {
 				$push: {
 					incidents: incident
@@ -55,7 +50,7 @@ module.exports = {
 			return res.status(500).json(error)
 		}
 
-		return res.status(201).json({ id: incident['id']} )
+		return res.status(201).json({ id: incident['id'] })
 	},
 	
 	async index(req, res) {
@@ -88,7 +83,7 @@ module.exports = {
 		const { errors } = validationResult(req)
 		if (errors.length) return res.status(422).json(errors)
 		
-		const id = req.params.id
+		const { id } = req.params
 
 		try {
 			Incident.findOne({ id: id }, (error, incident) => {
@@ -103,8 +98,9 @@ module.exports = {
 	async update(req, res) {
 		const { errors } = validationResult(req)
 		if (errors.length) return res.status(422).json(errors)
-
-		const { id, title, description, value } = req.body
+		
+		const { id } = req.params
+		const { title, description, value } = req.body
 
 		try {
 			Incident.findOneAndUpdate({
@@ -128,15 +124,15 @@ module.exports = {
 		const errors = validationResult(req)['errors']
 		if (errors.length) return res.status(422).json(errors)
 
-		const { id: incidentId } = req.params
-		const { authorization: ngoAuthId } = req.headers
+		const { ngo_id } = req.headers
+		const { id: incident_id } = req.params
 
 		// check whether given incident exists and its NGO
 		try {
-			Incident.findOne({ id: incidentId }, (error, incident) => {
+			Incident.findOne({ id: incident_id }, (error, incident) => {
 				if (error) return res.status(400).json(error)
-				if (!incident) return res.status(404).json(`Incident with id '${incidentId}' not found`)
-				NGO.findOne({ id: ngoAuthId }, error => {
+				if (!incident) return res.status(404).json(`Incident with id '${incident_id}' not found`)
+				NGO.findOne({ id: ngo_id }, error => {
 					if (error) return res.status(404).json(error)
 				})
 			})
@@ -146,10 +142,10 @@ module.exports = {
 
 		// remove incident from NGO list of incidents
 		try {
-			const { '_id': objId } = (await Incident.findOne({ id: incidentId }, '_id')) || null
-			if (objId === null) return res.status(404).json(`Incident with ID ${incidentId} not found`)
+			const { '_id': objId } = (await Incident.findOne({ id: incident_id }, '_id')) || null
+			if (objId === null) return res.status(404).json(`Incident with ID ${incident_id} not found`)
 			
-			NGO.findOne({ id: ngoAuthId }, (error, ngo) => {
+			NGO.findOne({ id: ngo_id }, (error, ngo) => {
 				if (error) return res.status(400).json(error)
 				
 				const incidentIndex = ngo.incidents.indexOf(objId)
@@ -167,7 +163,7 @@ module.exports = {
 
 		// remove incident from database
 		try {
-			Incident.deleteOne({ id: incidentId }, error => {
+			Incident.deleteOne({ id: incident_id }, error => {
 				if (error) return res.status(400).json(error)
 			})
 		} catch (error) {

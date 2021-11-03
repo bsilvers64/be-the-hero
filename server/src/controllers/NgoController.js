@@ -49,11 +49,11 @@ module.exports = {
 
 	async show(req, res) {
 		const errors = validationResult(req)['errors']
-		
-		if (errors.length) return res.status(422).json(errors)
+		const { id } = req.params || null
 
-		const id = req.params.id
-		
+		if (errors.length) return res.status(422).json(errors)
+		if (!id) return res.status(400).json({error: 'id not set'})
+
 		try {
 			NGO.findOne({ id: id }, (error, ngo) => {
 				if (error) return res.status(404).json(error)
@@ -68,12 +68,13 @@ module.exports = {
 		const errors = validationResult(req)['errors']
 		if (errors.length) return res.status(422).json(errors)
 		
-		let { password } = req.body
-		let currentHashedPassword = null
-		const { id, name, email, whatsapp, city, state } = req.body
+		const { name, email, whatsapp, city, state } = req.body
+		let { password } = req.body || null
+		const { ngo_id } = req.headers
+		let currentPassword = null
 
 		try {
-			NGO.findOne({ id: id }, error => {
+			NGO.findOne({ id: ngo_id }, error => {
 				if (error) return res.status(404).json(error)
 			})
 		} catch (error) {
@@ -81,19 +82,17 @@ module.exports = {
 		}
 
 		try {
-			currentHashedPassword = (await NGO.findOne({ id: id }))['password']
+			currentPassword = (await NGO.findOne({ id: ngo_id }))['password']
 		} catch (error) {
 			return res.status(500).json(error)
 		}
 		
-		if (!currentHashedPassword) return res.status(404).json({
+		if (!currentPassword) return res.status(404).json({
 			error: `NGO '${name}' not found`
 		})
-		
-		const isSamePassword = bcrypt.compareSync(password, currentHashedPassword)
-		
-		if (isSamePassword) {
-			password = currentHashedPassword
+
+		if (bcrypt.compareSync(password, currentPassword)) {
+			password = currentPassword
 		} else {
 			bcrypt.hash(password, 10).then(pwd => {
 				password = pwd
@@ -104,7 +103,7 @@ module.exports = {
 
 		try {
 			NGO.findOneAndUpdate({
-				id: id
+				id: ngo_id
 			}, {
 				name: name,
 				email: email,
@@ -112,11 +111,11 @@ module.exports = {
 				whatsapp: whatsapp,
 				city: city,
 				state: state,
-				created_at: (await NGO.findOne({ id: id }))['created_at'],
+				created_at: (await NGO.findOne({ id: ngo_id }))['created_at'],
 				updated_at: Date.now()
 			}, error => {
 				if (error) return res.status(406).json(error)
-				return res.status(201).json({ updated: true })
+				return res.status(204).send()
 			})
 		} catch (error) {
 			return res.status(500).json(error)
@@ -127,14 +126,12 @@ module.exports = {
 		const errors = validationResult(req)['errors']
 		if (errors.length) return res.status(422).json(errors)
 
-		const { id } = req.params
-		const authId = req.headers.authorization
+		const { ngo_id } = req.headers
 
 		// check whether if the given NGO exists
 		try {
-			const ngo = await NGO.findOne({ id: id }) || null
-			if (!ngo) return res.status(404).json(`NGO with ID '${id}' not found`)
-			if ((id !== authId) || (ngo.id !== authId)) return res.status(401).json('Unauthorized')
+			const ngo = await NGO.findOne({ id: ngo_id }) || null
+			if (!ngo) return res.status(404).json(`NGO with ID '${ngo_id}' not found`)
 		} catch (error) {
 			return res.status(500).json(error)
 		}
@@ -142,7 +139,7 @@ module.exports = {
 		// delete NGO incidents
 		try {
 			Incident.deleteMany({
-				ngo_owner: (await NGO.findOne({ id: id }))
+				ngo_owner: (await NGO.findOne({ id: ngo_id }))
 			}, error => {
 				if (error) return res.status(404).json(error)
 			})
@@ -152,7 +149,7 @@ module.exports = {
 
 		// delete NGO
 		try {
-			NGO.deleteOne({ id: id }, error => {
+			NGO.deleteOne({ id: ngo_id }, error => {
 				if (error) return res.status(404).json(error)
 				return res.status(204).send()
 			})

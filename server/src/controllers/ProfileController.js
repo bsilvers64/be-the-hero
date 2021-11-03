@@ -3,16 +3,16 @@ const Incident = require('../database/models/incident')
 
 module.exports = {
 	async index(req, res) {
+		const { ngo_id } = req.headers || null
 		const { page = 1 } = req.query
 		const limPage = 5
-		const { authorization: ngoId } = req.headers
 		
 		try {
-			if (!ngoId) return res.status(404).json(`NGO ID ${ngoId} not found`)
+			if (!ngo_id) return res.status(404).json(`NGO ID ${ngo_id} not found`)
 
-			const count = ((await NGO.findOne({ id: ngoId }))['incidents']).length
+			const count = ((await NGO.findOne({ id: ngo_id }))['incidents']).length
 			const incidents = await Incident
-				.find({'ngo_owner': (await NGO.find({ id: ngoId}))})
+				.find({'ngo_owner': (await NGO.find({ id: ngo_id }))})
 				.populate({
 					path: 'ngo_owner',
 					select: [
