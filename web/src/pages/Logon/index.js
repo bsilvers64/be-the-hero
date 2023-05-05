@@ -17,11 +17,12 @@ function Logon() {
 
 		try {
 			const response = await api.post('/session', { email, password })
-
+			console.log('inside bruhddindn')
+			console.log(response)
 			// Stores id and name from ngo into the browser's local storage
 			localStorage.setItem('ngoId', response.data['id'])
 			localStorage.setItem('ngoName', response.data['name'])
-
+			console.log(response.data)
 			// redirect user to profile page
 			history.push('/profile')
 		} catch (error) {

@@ -29,6 +29,7 @@ function Register() {
 			if (response.status > 201) {
 				return alert(`ERROR ${response.status}: ${response.statusText}`)
 			} else {
+				alert("you have been registered!!")
 				return history.push('/') // redirect user to login page
 			}
 		} catch (error) {
@@ -51,6 +52,7 @@ function Register() {
 				</section>
 				<form onSubmit={handleRegister}>
 					<input
+						type='text'
 						placeholder='NGO name'
 						value={name}
 						onChange={e => setName(e.target.value)}

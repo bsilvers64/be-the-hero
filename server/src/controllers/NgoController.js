@@ -6,8 +6,9 @@ const Incident = require('../database/models/incident')
 
 module.exports = {
 	async create(req, res) {
-		const errors = validationResult(req)['errors']		
-		if (errors.length) return res.status(422).json(errors)
+		const errors = validationResult(req)['errors']
+		console.log(validationResult(req)['errors'])		
+		//if (errors.length) return res.status(422).json(errors)
 		
 		const { name, email, password, whatsapp, city, state } = req.body
 		const id = crypto.randomBytes(4).toString('hex')
@@ -25,6 +26,7 @@ module.exports = {
 
 		try {
 			NGO.create(ngo, (error, ngo) => {
+				console.log(ngo)
 				if (error) return res.status(400).json(error)
 				return res.status(201).json(ngo)
 			})

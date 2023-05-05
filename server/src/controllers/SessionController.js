@@ -6,13 +6,16 @@ module.exports = {
 	async create(req, res) {
 		const { email, password } = req.body
 		const { errors } = validationResult(req)
-		
+		console.log('inside this stuff')
 		if (errors.length) return res.status(422).json(errors)
     
 		try {
 			NGO.findOne({ email: email }, async (error, ngo) => {
 				if (!ngo) return res.status(400).json({ error: 'Invalid credentials' })
-				if (error) return res.status(404).json(error)
+				if (error) {
+					console.log('yolo')
+					return res.status(404).json(error)
+				}
 
 				bcrypt.compare(password, ngo.password).then(isMatch => {
 					if (isMatch) {

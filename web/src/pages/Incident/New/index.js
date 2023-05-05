@@ -19,7 +19,8 @@ function NewIncident() {
 		const data = { title, description, value }
 		
 		try {
-			const response = await api.post('/incident', data, {
+			const response = await api.post('/incident', data, 
+			{
 				headers: { authorization: ngoId }
 			})
 			
@@ -47,6 +48,7 @@ function NewIncident() {
 				</section>
 				<form onSubmit={handleNewIncident}>
 					<input
+						type='text'
 						placeholder='Name of the case'
 						value={title}
 						onChange={e => setTitle(e.target.value)}
@@ -57,6 +59,7 @@ function NewIncident() {
 						onChange={e => setDescription(e.target.value)}
 					/>
 					<input
+						type='number'
 						placeholder='Value in dollar'
 						value={value}
 						onChange={e => setValue(e.target.value)}

@@ -8,8 +8,8 @@ const env = {
 }
 
 // eslint-disable-next-line quotes
-mongoose['uri'] = `mongodb+srv://${env.username}:${env.password}@bethehero.9qryn.mongodb.net/${env.db_table}`
-
+mongoose['uri'] = `mongodb+srv://bhavansh:FCroXGU1gxL7AT2Y@bethehero.oldgna8.mongodb.net/?retryWrites=true&w=majority`
+mongoose.set('strictQuery', false);
 mongoose.connect(mongoose.uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
