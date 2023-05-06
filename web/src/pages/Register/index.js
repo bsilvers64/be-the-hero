@@ -45,7 +45,7 @@ function Register() {
 					<img src={logoImg} alt='Be The Hero' />
 					<h1>Register</h1>
 					<p>Enroll and help people to find and help your NGO</p>
-					<Link className='back-link' to='/'>
+					<Link className='back-link' to='/login'>
 						<FiArrowLeft size={16} color='#e02041' />
 						Back to login
 					</Link>

@@ -5,6 +5,7 @@ import { FiLogIn } from 'react-icons/fi'
 import './styles.css'
 import logoImg from '../../assets/logo.svg'
 import heroesImg from '../../assets/heroes.png'
+import sevaImg from '../../assets/seva2.png'
 
 function Logon() {
 	const [email, setEmail] = useState('')
@@ -34,7 +35,8 @@ function Logon() {
 	return (
 		<div className='logon-container'>
 			<section className='form'>
-				<img src={logoImg} alt='Be The Hero' />
+			<img src={logoImg} alt='Be The Hero' />
+
 				<form onSubmit={handleLogon}>
 					<h1>Login</h1>
 					<input
@@ -53,6 +55,10 @@ function Logon() {
 					<Link className='back-link' to='/register'>
 						<FiLogIn size={16} color='#e02041' />
 						I am not enrolled
+					</Link>
+					<Link className='back-link' to='/'>
+						<FiLogIn size={16} color='#e02041' />
+						Home
 					</Link>
 				</form>
 			</section>

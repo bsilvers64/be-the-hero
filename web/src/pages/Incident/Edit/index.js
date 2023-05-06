@@ -75,7 +75,7 @@ function EditIncident() {
 						onChange={e => setDescription(e.target.value)}
 					/>
 					<input
-						placeholder='Value in dollar'
+						placeholder='Value in Rupees'
 						value={value}
 						onChange={e => setValue(e.target.value)}
 					/>

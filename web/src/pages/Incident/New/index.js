@@ -60,7 +60,7 @@ function NewIncident() {
 					/>
 					<input
 						type='number'
-						placeholder='Value in dollar'
+						placeholder='Value in Rupees'
 						value={value}
 						onChange={e => setValue(e.target.value)}
 					/>

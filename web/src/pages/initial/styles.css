@@ -1,0 +1,79 @@
+    /* Add styles for header */
+    header {
+        background-color: #4994A5;
+        color: white;
+        padding: 0.1em;
+        text-align: center;
+        font-size: 2em;
+      }
+      
+      /* Add styles for navigation bar */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #89C2D0;
+        height: 50px;
+        padding: 0 20px;
+      }
+  
+      /* Add styles for navigation links */
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2em;
+        margin-right: 20px;
+      }
+  
+      /* Add styles for main content */
+      main {
+        margin: 20px;
+      }
+  
+      /* Add styles for volunteer login form */
+      form {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 0 auto;
+      }
+  
+  
+  
+      /* Add styles for footer */
+      footer {
+        background-color: #89C2D0;
+        color: white;
+        padding: 1em;
+        text-align: center;
+        position: fixed;
+        bottom: 0px;
+        
+      }
+
+      video {
+        object-fit: cover;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        margin: 10px 10px;
+
+      }
+
+      .news {float: left;}
+      .news section {width: 25%; float: left;}
+
+
+
+      .blogs {
+        display: flex;
+
+      }
+      .blogs > div {
+        flex: 1; /*grow*/
+      }
